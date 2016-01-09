@@ -17,6 +17,7 @@ import tv.piratemedia.lifi.DataModel.Rule;
 import tv.piratemedia.lifi.DataModel.RulesSQLiteHelper;
 import tv.piratemedia.lightcontroler.api.LightControllerAPI;
 import tv.piratemedia.lightcontroler.api.LightControllerException;
+import tv.piratemedia.lightcontroler.api.LightZone;
 import tv.piratemedia.lightcontroler.api.OnPermissionChanged;
 
 public class Prefs extends AppCompatActivity {
@@ -76,6 +77,11 @@ public class Prefs extends AppCompatActivity {
         rvl = (RecyclerView) findViewById(R.id.rv);
         prompt = (TextView) findViewById(R.id.prompt);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateRules();
     }
 
@@ -93,7 +99,7 @@ public class Prefs extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(context);
         rvl.setLayoutManager(llm);
 
-        rules = new RuleAdapter(list);
+        rules = new RuleAdapter(list, lcAPI, db);
         rvl.setAdapter(rules);
     }
 
@@ -102,6 +108,19 @@ public class Prefs extends AppCompatActivity {
     }
 
     public void createRule(View v) {
+        Intent i = new Intent(this, CreateRule.class);
+        startActivity(i);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == LightControllerAPI.PickRequestCode) {
+            if(resultCode == RESULT_OK) {
+                LightZone Zone = (LightZone)data.getSerializableExtra("LightZone");
+                rules.updateCurrentZone(Zone.ID, Zone.isColor() ? "color" : "white");
+            } else if(resultCode == RESULT_CANCELED) {
+                //picker was closed without picking
+            }
+        }
     }
 }

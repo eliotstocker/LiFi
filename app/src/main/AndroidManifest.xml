@@ -3,6 +3,7 @@
     package="tv.piratemedia.lifi" >
 
     <uses-permission android:name="tv.piratemedia.lightcontroler.api"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -17,6 +18,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Install" android:theme="@style/InstallTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".CreateRule" android:theme="@style/CreateTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

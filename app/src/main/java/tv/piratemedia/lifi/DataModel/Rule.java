@@ -10,13 +10,15 @@ public class Rule {
     private int startTime = -1;
     private int endTime = -1;
     private boolean enabled = true;
+    private String type;
     private String SSID;
 
     public Rule(){}
 
-    public Rule(int zoneID, boolean power, String SSID) {
+    public Rule(int zoneID, String type, boolean power, String SSID) {
         super();
         this.zoneID = zoneID;
+        this.type = type;
         this.power = power;
         this.SSID = SSID;
     }
@@ -31,6 +33,18 @@ public class Rule {
 
     public String getSSID() {
         return this.SSID;
+    }
+
+    public void setSSID(String SSID) {
+        this.SSID = SSID;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setZone(int zone) {
@@ -72,7 +86,7 @@ public class Rule {
 
     @Override
     public String toString() {
-        return "Rule [Zone=" + zoneID + ", Power=" + (power ? "on" : "off") + ", StartTime=" + startTime
-                + ", EndTime=" + endTime + "]";
+        return "Rule [Zone=" + zoneID + ", Type=" + type + ", Power=" + (power ? "on" : "off") + ", StartTime=" + startTime
+                + ", EndTime=" + endTime + ", Enabled=" + enabled + ", SSID=" + SSID + "]";
     }
 }

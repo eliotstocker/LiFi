@@ -19,13 +19,14 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String KEY_ID = "id";
     private static final String KEY_ZONE = "zone";
+    private static final String KEY_TYPE = "type";
     private static final String KEY_POWER = "power";
     private static final String KEY_START = "start";
     private static final String KEY_END = "end";
     private static final String KEY_ENABLED = "enabled";
     private static final String KEY_SSID = "ssid";
 
-    private static final String[] COLUMNS = {KEY_ID,KEY_ZONE,KEY_POWER,KEY_START,KEY_END};
+    private static final String[] COLUMNS = {KEY_ID,KEY_ZONE,KEY_TYPE,KEY_POWER,KEY_START,KEY_END,KEY_ENABLED,KEY_SSID};
 
     public RulesSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,6 +36,7 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_RULES + " ( " +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_ZONE + " INTEGER, " +
+                KEY_TYPE + " STRING, " +
                 KEY_POWER + " BOOLEAN, " +
                 KEY_START + " INTEGER, " +
                 KEY_END + " INTEGER, " +
@@ -56,10 +58,12 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_ZONE, rule.getZone());
+        values.put(KEY_TYPE, rule.getType());
         values.put(KEY_POWER, rule.getPower());
         values.put(KEY_START, rule.getStart());
         values.put(KEY_END, rule.getEnd());
         values.put(KEY_ENABLED, rule.getEnabled());
+        values.put(KEY_SSID, rule.getSSID());
 
         db.insert(TABLE_RULES, // table
                 null, //nullColumnHack
@@ -75,7 +79,7 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
                 db.query(TABLE_RULES, // a. table
                         COLUMNS, // b. column names
                         " id = ?", // c. selections
-                        new String[] { String.valueOf(id) }, // d. selections args
+                        new String[]{String.valueOf(id)}, // d. selections args
                         null, // e. group by
                         null, // f. having
                         null, // g. order by
@@ -87,9 +91,11 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
         Rule rule = new Rule();
         rule.setID(cursor.getInt(0));
         rule.setZone(cursor.getInt(1));
-        rule.setPower(cursor.getInt(2) > 0);
-        rule.setTimes(cursor.getInt(3), cursor.getInt(4));
-        rule.setEnabled(cursor.getInt(5) > 0);
+        rule.setType(cursor.getString(2));
+        rule.setPower(cursor.getInt(3) > 0);
+        rule.setTimes(cursor.getInt(4), cursor.getInt(5));
+        rule.setEnabled(cursor.getInt(6) > 0);
+        rule.setSSID(cursor.getString(7));
 
         Log.d("getRule(" + id + ")", rule.toString());
 
@@ -110,9 +116,11 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
                 rule = new Rule();
                 rule.setID(cursor.getInt(0));
                 rule.setZone(cursor.getInt(1));
-                rule.setPower(cursor.getInt(2) > 0);
-                rule.setTimes(cursor.getInt(3), cursor.getInt(4));
-                rule.setEnabled(cursor.getInt(5) > 0);
+                rule.setType(cursor.getString(2));
+                rule.setPower(cursor.getInt(3) > 0);
+                rule.setTimes(cursor.getInt(4), cursor.getInt(5));
+                rule.setEnabled(cursor.getInt(6) > 0);
+                rule.setSSID(cursor.getString(7));
 
                 // Add book to books
                 books.add(rule);
@@ -129,10 +137,12 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_ZONE, rule.getZone());
+        values.put(KEY_TYPE, rule.getType());
         values.put(KEY_POWER, rule.getPower());
         values.put(KEY_START, rule.getStart());
         values.put(KEY_END, rule.getEnd());
         values.put(KEY_ENABLED, rule.getEnabled());
+        values.put(KEY_SSID, rule.getSSID());
 
         int i = db.update(TABLE_RULES, //table
                 values, // column/value
@@ -144,17 +154,21 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public void deleteRule(Rule rule) {
+    public void deleteRule(int ID) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(TABLE_RULES,
-                KEY_ID+" = ?",
-                new String[] { String.valueOf(rule.getID()) });
+                KEY_ID + " = ?",
+                new String[]{String.valueOf(ID)});
 
         db.close();
 
-        Log.d("deleteRule", rule.toString());
+        Log.d("deleteRule", "ID: "+ID);
 
+    }
+
+    public void deleteRule(Rule rule) {
+        deleteRule(rule.getID());
     }
 }
