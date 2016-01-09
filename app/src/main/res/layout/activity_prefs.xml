@@ -30,4 +30,34 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:onClick="createRule"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light"
+        android:gravity="center"
+        android:id="@+id/perms"
+        android:visibility="gone"
+        android:elevation="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Light Controller API Permission must be granted for this app to function, check the notification shade if you dont see a popup"
+            android:id="@+id/textView"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:gravity="center" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Permission Again"
+            android:id="@+id/button3"
+            android:layout_marginTop="20dp"
+            android:onClick="requestPermission" />
+    </LinearLayout>
+
 </RelativeLayout>
