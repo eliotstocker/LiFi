@@ -13,8 +13,7 @@
         <activity android:name=".Prefs" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="tv.piratemedia.lightcontroller.plugin" />
             </intent-filter>
         </activity>
         <activity android:name=".Install" android:theme="@style/InstallTheme">
@@ -27,6 +26,15 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity-alias android:label="@string/app_name"
+            android:name=".MainActivity"
+            android:enabled="true"
+            android:targetActivity=".Prefs">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
     </application>
 
 </manifest>
