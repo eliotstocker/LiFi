@@ -3,6 +3,7 @@ package tv.piratemedia.lifi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -67,7 +68,9 @@ public class Prefs extends AppCompatActivity {
         }
         db = new RulesSQLiteHelper(this);
 
-        ActivityCompat.requestPermissions(this, new String[] {"tv.piratemedia.lightcontroler.api"}, 0);
+        if(ActivityCompat.checkSelfPermission(this, "tv.piratemedia.lightcontroler.api") != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{"tv.piratemedia.lightcontroler.api"}, 0);
+        }
 
         //setup api and show prompt to install if needed;
         try {
